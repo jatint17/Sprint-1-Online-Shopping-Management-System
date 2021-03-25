@@ -1,12 +1,10 @@
 package com.cg.onlineshoppingms.userms.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class UserEntity
+@Table(name = "UserEntity")
+public class User
 {
     @GeneratedValue
     @Id
@@ -15,8 +13,8 @@ public class UserEntity
     private String username;
     private String password;
 
-    public UserEntity(){}
-    public UserEntity(String username, String password)
+    public User(){}
+    public User(String username, String password)
     {
         this.username=username;
         this.password=password;

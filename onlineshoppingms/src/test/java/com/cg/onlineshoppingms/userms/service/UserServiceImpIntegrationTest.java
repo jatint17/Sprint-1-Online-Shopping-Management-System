@@ -1,6 +1,6 @@
 package com.cg.onlineshoppingms.userms.service;
 
-import com.cg.onlineshoppingms.userms.entity.UserEntity;
+import com.cg.onlineshoppingms.userms.entity.User;
 import com.cg.onlineshoppingms.userms.exceptions.InvalidPasswordException;
 import com.cg.onlineshoppingms.userms.exceptions.InvalidUsernameException;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Import(UserServiceImpl.class)
 @DataJpaTest
 @AutoConfigureTestDatabase
-public class UserEntityServiceImpIntegrationTest
+public class UserServiceImpIntegrationTest
 {
 
     @Autowired
@@ -37,11 +37,11 @@ public class UserEntityServiceImpIntegrationTest
     public void testAddUser_1() {
         String username = "arpit";
         String password = "password";
-        UserEntity result = userService.addUser(username, password);
+        User result = userService.addUser(username, password);
         assertNotNull(result);
-        List<UserEntity> users = entityManager.createQuery("from UserEntity", UserEntity.class).getResultList();
+        List<User> users = entityManager.createQuery("from UserEntity", User.class).getResultList();
         assertEquals(1,users.size());
-        UserEntity stored = users.get(0);
+        User stored = users.get(0);
         assertEquals(stored.getUserId(), result.getUserId());
         assertEquals(username, result.getUsername());
         assertEquals(username, stored.getUsername());
@@ -122,7 +122,7 @@ public class UserEntityServiceImpIntegrationTest
         String username = "user";
         String password = "password";
         String enteredUsername = "wrong";
-        UserEntity user = new UserEntity(username, password);
+        User user = new User(username, password);
         entityManager.persist(user);
         boolean result = userService.checkCredentials(enteredUsername, password);
         Assertions.assertFalse(result);
@@ -136,7 +136,7 @@ public class UserEntityServiceImpIntegrationTest
         String username = "user";
         String password = "password";
         String enteredPassword = "wrong";
-        UserEntity user = new UserEntity(username, password);
+        User user = new User(username, password);
         entityManager.persist(user);
         boolean result = userService.checkCredentials(username, enteredPassword);
         Assertions.assertFalse(result);
@@ -150,8 +150,8 @@ public class UserEntityServiceImpIntegrationTest
     {
         String username = "user";
         String password = "password";
-        UserEntity userEntity = new UserEntity(username,password);
-        entityManager.persist(userEntity);
+        User user = new User(username,password);
+        entityManager.persist(user);
         boolean result = userService.checkCredentials(username,password);
         Assertions.assertTrue(result);
     }

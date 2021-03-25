@@ -1,10 +1,10 @@
 package com.cg.onlineshoppingms.userms.service;
 
-import com.cg.onlineshoppingms.userms.entity.UserEntity;
+import com.cg.onlineshoppingms.userms.entity.User;
 
 public interface IUserService
 {
-    UserEntity addUser(String username, String password);
-    UserEntity findById(Long userId);
+    User addUser(String username, String password);
+    User findById(Long userId);
     boolean checkCredentials(String username, String password);
 }

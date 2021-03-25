@@ -5,7 +5,7 @@ import com.cg.onlineshoppingms.userms.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.cg.onlineshoppingms.userms.entity.UserEntity;
+import com.cg.onlineshoppingms.userms.entity.User;
 import com.cg.onlineshoppingms.userms.repository.IUserRepository;
 import java.util.Optional;
 
@@ -17,26 +17,26 @@ public class UserServiceImpl implements IUserService {
 
     @Transactional
     @Override
-    public UserEntity addUser(String username, String password) {
+    public User addUser(String username, String password) {
         validateUsername(username);
         validatePassword(password);
-        UserEntity user = userRepository.findUserByUsername(username);
+        User user = userRepository.findUserByUsername(username);
         if (user!=null) {
             throw new AddUserException("Username already exists");
         }
-        UserEntity created = new UserEntity(username, password);
+        User created = new User(username, password);
         created = userRepository.save(created);
         return created;
     }
 
     @Override
-    public UserEntity findById(Long userId) {
+    public User findById(Long userId) {
         validateId(userId);
-        Optional<UserEntity> optional = userRepository.findById(userId);
+        Optional<User> optional = userRepository.findById(userId);
         if (!optional.isPresent()) {
             throw new UserNotFoundException("User not found");
         }
-        UserEntity user = optional.get();
+        User user = optional.get();
         return user;
     }
 
@@ -45,7 +45,7 @@ public class UserServiceImpl implements IUserService {
         if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
             return false;
         }
-        UserEntity user = userRepository.findUserByUsername(username);
+        User user = userRepository.findUserByUsername(username);
         if (user == null) {
             return false;
         }

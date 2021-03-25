@@ -1,9 +1,9 @@
 package com.cg.onlineshoppingms.userms.repository;
 
-import com.cg.onlineshoppingms.userms.entity.UserEntity;
+import com.cg.onlineshoppingms.userms.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IUserRepository extends JpaRepository<UserEntity,Long>
+public interface IUserRepository extends JpaRepository<User,Long>
 {
-    UserEntity findUserByUsername(String username);
+    User findUserByUsername(String username);
 }

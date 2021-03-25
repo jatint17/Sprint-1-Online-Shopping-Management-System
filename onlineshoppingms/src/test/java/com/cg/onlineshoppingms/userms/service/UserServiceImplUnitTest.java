@@ -1,6 +1,6 @@
 package com.cg.onlineshoppingms.userms.service;
 
-import com.cg.onlineshoppingms.userms.entity.UserEntity;
+import com.cg.onlineshoppingms.userms.entity.User;
 import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.*;
 import com.cg.onlineshoppingms.userms.exceptions.*;
@@ -36,18 +36,18 @@ public class UserServiceImplUnitTest {
     public void testAddUser_1() {
         String username = "arpit";
         String password = "password";
-        UserEntity user = mock(UserEntity.class);
-        UserEntity saved = mock(UserEntity.class);
+        User user = mock(User.class);
+        User saved = mock(User.class);
         doNothing().when(userService).validateUsername(username);
         doNothing().when(userService).validatePassword(password);
         when(userRepository.findUserByUsername(username)).thenReturn(null);
-        when(userRepository.save(any(UserEntity.class))).thenReturn(saved);
-        UserEntity result = userService.addUser(username, password);
+        when(userRepository.save(any(User.class))).thenReturn(saved);
+        User result = userService.addUser(username, password);
         assertNotNull(result);
         assertEquals(saved, result);
         verify(userService).validatePassword(password);
         verify(userService).validateUsername(username);
-        verify(userRepository).save(any(UserEntity.class));
+        verify(userRepository).save(any(User.class));
         verify(userRepository).findUserByUsername(username);
     }
 
@@ -110,7 +110,7 @@ public class UserServiceImplUnitTest {
     public void testAddUser_6() {
         String username = "arpit";
         String password = "password";
-        UserEntity user = mock(UserEntity.class);
+        User user = mock(User.class);
         doNothing().when(userService).validateUsername(username);
         doNothing().when(userService).validatePassword(password);
         when(userRepository.findUserByUsername(username)).thenReturn(user);
@@ -212,7 +212,7 @@ public class UserServiceImplUnitTest {
         String username = "username";
         String password = "password";
         String enteredUsername = "wrong";
-        UserEntity user = new UserEntity(username,password);
+        User user = new User(username,password);
         Mockito.when(userRepository.findUserByUsername(enteredUsername)).thenReturn(null);
         boolean result = userService.checkCredentials(enteredUsername,password);
         Assertions.assertFalse(result);
@@ -228,7 +228,7 @@ public class UserServiceImplUnitTest {
         String username = "username";
         String password = "password";
         String enteredPassword = "wrong";
-        UserEntity user = new UserEntity(username,password);
+        User user = new User(username,password);
         Mockito.when(userRepository.findUserByUsername(username)).thenReturn(user);
         boolean result = userService.checkCredentials(username,enteredPassword);
         Assertions.assertFalse(result);
@@ -243,7 +243,7 @@ public class UserServiceImplUnitTest {
     {
         String username = "username";
         String password = "password";
-        UserEntity user = new UserEntity(username,password);
+        User user = new User(username,password);
         Mockito.when(userRepository.findUserByUsername(username)).thenReturn(user);
         boolean result = userService.checkCredentials(username,password);
         Assertions.assertTrue(result);
@@ -272,8 +272,8 @@ public class UserServiceImplUnitTest {
 	{
 		long userid=100;
 		doNothing().when(userService).validateId(userid);
-		UserEntity user=mock(UserEntity.class);
-		Optional<UserEntity>optional=Optional.empty();
+		User user=mock(User.class);
+		Optional<User>optional=Optional.empty();
 
 		when(userRepository.findById(userid)).thenReturn(optional);
 		Executable executable=()->userService.findById(userid);
@@ -287,10 +287,10 @@ public class UserServiceImplUnitTest {
 	{
 		long userid=3;
 		doNothing().when(userService).validateId(userid);
-		UserEntity user=mock(UserEntity.class);
-		Optional<UserEntity>optional = Optional.of(user);
+		User user=mock(User.class);
+		Optional<User>optional = Optional.of(user);
 		when (userRepository.findById(userid)).thenReturn(optional);
-		UserEntity result=userService.findById(userid);
+		User result=userService.findById(userid);
 		Assertions.assertEquals(user,result);
 		verify (userRepository).findById(userid);
 	}
