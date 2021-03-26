@@ -1,39 +1,49 @@
 package com.cg.onlineshoppingms.userms.service;
 
 
+import com.cg.onlineshoppingms.userms.dto.CustomUserDetails;
 import com.cg.onlineshoppingms.userms.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.cg.onlineshoppingms.userms.entity.User;
 import com.cg.onlineshoppingms.userms.repository.IUserRepository;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements IUserService, UserDetailsService
+{
 
     @Autowired
     private IUserRepository userRepository;
 
     @Transactional
     @Override
-    public User addUser(String username, String password) {
+    public User addUser(String username, String password, Set<String> roles)
+    {
         validateUsername(username);
         validatePassword(password);
         User user = userRepository.findUserByUsername(username);
-        if (user!=null) {
+        if (user!=null)
+        {
             throw new AddUserException("Username already exists");
         }
-        User created = new User(username, password);
+        User created = new User(username, password, roles);
         created = userRepository.save(created);
         return created;
     }
 
     @Override
-    public User findById(Long userId) {
+    public User findById(Long userId)
+    {
         validateId(userId);
         Optional<User> optional = userRepository.findById(userId);
-        if (!optional.isPresent()) {
+        if (!optional.isPresent())
+        {
             throw new UserNotFoundException("User not found");
         }
         User user = optional.get();
@@ -41,16 +51,39 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean checkCredentials(String username, String password) {
-        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+    public boolean checkCredentials(String username, String password)
+    {
+        if (username == null || username.isEmpty() || password == null || password.isEmpty())
+        {
             return false;
         }
         User user = userRepository.findUserByUsername(username);
-        if (user == null) {
+        if (user == null)
+        {
             return false;
         }
         boolean result = user.getUsername().equals(username) && user.getPassword().equals(password);
         return result;
+    }
+
+    @Override
+    public User findUserByUsername(String username)
+    {
+        validateUsername(username);
+        User user = userRepository.findUserByUsername(username);
+        if (user==null)
+        {
+            throw new InvalidUsernameException("User does not exist.");
+        }
+        return user;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
+    {
+        User user = findUserByUsername(username);
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+        return userDetails;
     }
 
     public void validateUsername(String username) {
@@ -70,4 +103,5 @@ public class UserServiceImpl implements IUserService {
             throw new InvalidIdException("Invalid id");
         }
     }
+
 }

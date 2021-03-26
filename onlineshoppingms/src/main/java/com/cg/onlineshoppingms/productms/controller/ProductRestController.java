@@ -9,30 +9,29 @@ import com.cg.onlineshoppingms.productms.util.ProductUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/products")
 @RestController
 public class ProductRestController
 {
     @Autowired
-    IProductService productService;
+    private IProductService productService;
     @Autowired
-    ProductUtil productUtil;
+    private ProductUtil productUtil;
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/a/products/add")
     public ProductDetails addProduct(@RequestBody AddProductRequest request)
     {
         Product product = productService.add(request.getProductName(), request.getPrice());
         return productUtil.toDetail(product);
     }
 
-    @GetMapping(value = "/byid/{id}")
+    @GetMapping(value = "/c/products/byid/{id}")
     public ProductDetails findById(@PathVariable("id")Long productId)
     {
         Product product = productService.findById(productId);
         return productUtil.toDetail(product);
     }
 
-    @PutMapping(value = "/updateprice")
+    @PutMapping(value = "/a/products/updateprice")
     public ProductDetails updatePrice(@RequestBody UpdatePriceRequest request)
     {
         Product product = productService.updatePrice(request.getProductId(), request.getNewPrice());
