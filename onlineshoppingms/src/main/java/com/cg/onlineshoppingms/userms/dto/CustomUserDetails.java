@@ -21,10 +21,11 @@ public class CustomUserDetails implements UserDetails
     public Collection<? extends GrantedAuthority> getAuthorities()
     {
         Set<String> roles = user.getRoles();
-        Set<GrantedAuthority> authorities = roles.stream().map(role -> {
-            GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.toUpperCase());
-            return authority;
-        })
+        Set<GrantedAuthority> authorities = roles.stream().
+                map(role -> {
+                    GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.toUpperCase());
+                    return authority;
+                })
                 .collect(Collectors.toSet());
         return authorities;
     }
