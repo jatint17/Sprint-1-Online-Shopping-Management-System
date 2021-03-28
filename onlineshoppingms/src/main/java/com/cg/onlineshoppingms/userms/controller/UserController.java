@@ -36,7 +36,8 @@ public class UserController
         Set<String> roles = new HashSet<>();
         roles.add(request.getRole());
         User user = userService.addUser(request.getUsername(), request.getPassword(), roles);
-        return userUtil.toUserDetails(user);
+        UserDetailsResponse response = userUtil.toUserDetails(user);
+        return response;
     }
 
     /**

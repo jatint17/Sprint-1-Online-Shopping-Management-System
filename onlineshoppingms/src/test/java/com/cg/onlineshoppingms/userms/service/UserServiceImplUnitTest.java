@@ -27,97 +27,115 @@ public class UserServiceImplUnitTest {
 	@InjectMocks
 	UserServiceImpl userService;
 
-//    /*
-//     * Scenario: successfully added user
-//     */
-//    @Test
-//    public void testAddUser_1() {
-//        String username = "arpit";
-//        String password = "password";
-//        User user = mock(User.class);
-//        User saved = mock(User.class);
-//        doNothing().when(userService).validateUsername(username);
-//        doNothing().when(userService).validatePassword(password);
-//        when(userRepository.findUserByUsername(username)).thenReturn(null);
-//        when(userRepository.save(any(User.class))).thenReturn(saved);
-//        User result = userService.addUser(username, password);
-//        assertNotNull(result);
-//        assertEquals(saved, result);
-//        verify(userService).validatePassword(password);
-//        verify(userService).validateUsername(username);
-//        verify(userRepository).save(any(User.class));
-//        verify(userRepository).findUserByUsername(username);
-//    }
-//
-//    /*
-//     * Scenario: empty username is entered
-//     */
-//    @Test
-//    public void testAddUser_2() {
-//        String username = "";
-//        String password = "password";
-//        doThrow(InvalidUsernameException.class).when(userService).validateUsername(username);
-//        Executable executable = () -> userService.addUser(username, password);
-//        assertThrows(InvalidUsernameException.class, executable);
-//        verify(userService).validateUsername(username);
-//    }
-//
-//    /*
-//     * Scenario: empty password is entered
-//     */
-//    @Test
-//    public void testAddUser_3() {
-//        String username = "arpit";
-//        String password = "";
-//        doThrow(InvalidPasswordException.class).when(userService).validatePassword(password);
-//        Executable executable = () -> userService.addUser(username, password);
-//        assertThrows(InvalidPasswordException.class, executable);
-//        verify(userService).validatePassword(password);
-//    }
-//
-//    /*
-//     * Scenario: password is null
-//     */
-//    @Test
-//    public void testAddUser_4() {
-//        String username = "arpit";
-//        String password = null;
-//        doThrow(InvalidPasswordException.class).when(userService).validatePassword(password);
-//        Executable executable = () -> userService.addUser(username, password);
-//        assertThrows(InvalidPasswordException.class, executable);
-//        verify(userService).validatePassword(password);
-//    }
-//
-//    /*
-//     * Scenario: username is null
-//     */
-//    @Test
-//    public void testAddUser_5() {
-//        String username = null;
-//        String password = "password";
-//        doThrow(InvalidUsernameException.class).when(userService).validateUsername(username);
-//        Executable executable = () -> userService.addUser(username, password);
-//        assertThrows(InvalidUsernameException.class, executable);
-//        verify(userService).validateUsername(username);
-//    }
-//
-//    /*
-//     * Scenario: username already exists
-//     */
-//    @Test
-//    public void testAddUser_6() {
-//        String username = "arpit";
-//        String password = "password";
-//        User user = mock(User.class);
-//        doNothing().when(userService).validateUsername(username);
-//        doNothing().when(userService).validatePassword(password);
-//        when(userRepository.findUserByUsername(username)).thenReturn(user);
-//        Executable executable = () -> userService.addUser(username, password);
-//        assertThrows(AddUserException.class,executable);
-//        verify(userService).validatePassword(password);
-//        verify(userService).validateUsername(username);
-//        verify(userRepository).findUserByUsername(username);
-//    }
+    /*
+     * Scenario: successfully added user
+     */
+    @Test
+    public void testAddUser_1() {
+        String username = "arpit";
+        String password = "password";
+        String role = "role1";
+        Set<String> roles = new HashSet<>();
+        roles.add(role);
+        User user = mock(User.class);
+        User saved = mock(User.class);
+        doNothing().when(userService).validateUsername(username);
+        doNothing().when(userService).validatePassword(password);
+        when(userRepository.findUserByUsername(username)).thenReturn(null);
+        when(userRepository.save(any(User.class))).thenReturn(saved);
+        User result = userService.addUser(username, password, roles);
+        assertNotNull(result);
+        assertEquals(saved, result);
+        verify(userService).validatePassword(password);
+        verify(userService).validateUsername(username);
+        verify(userRepository).save(any(User.class));
+        verify(userRepository).findUserByUsername(username);
+    }
+
+    /*
+     * Scenario: empty username is entered
+     */
+    @Test
+    public void testAddUser_2() {
+        String username = "";
+        String password = "password";
+        String role = "role1";
+        Set<String> roles = new HashSet<>();
+        roles.add(role);
+        doThrow(InvalidUsernameException.class).when(userService).validateUsername(username);
+        Executable executable = () -> userService.addUser(username, password, roles);
+        assertThrows(InvalidUsernameException.class, executable);
+        verify(userService).validateUsername(username);
+    }
+
+    /*
+     * Scenario: empty password is entered
+     */
+    @Test
+    public void testAddUser_3() {
+        String username = "arpit";
+        String password = "";
+        String role = "role1";
+        Set<String> roles = new HashSet<>();
+        roles.add(role);
+        doThrow(InvalidPasswordException.class).when(userService).validatePassword(password);
+        Executable executable = () -> userService.addUser(username, password, roles);
+        assertThrows(InvalidPasswordException.class, executable);
+        verify(userService).validatePassword(password);
+    }
+
+    /*
+     * Scenario: password is null
+     */
+    @Test
+    public void testAddUser_4() {
+        String username = "arpit";
+        String password = null;
+        String role = "role1";
+        Set<String> roles = new HashSet<>();
+        roles.add(role);
+        doThrow(InvalidPasswordException.class).when(userService).validatePassword(password);
+        Executable executable = () -> userService.addUser(username, password, roles);
+        assertThrows(InvalidPasswordException.class, executable);
+        verify(userService).validatePassword(password);
+    }
+
+    /*
+     * Scenario: username is null
+     */
+    @Test
+    public void testAddUser_5() {
+        String username = null;
+        String password = "password";
+        String role = "role1";
+        Set<String> roles = new HashSet<>();
+        roles.add(role);
+        doThrow(InvalidUsernameException.class).when(userService).validateUsername(username);
+        Executable executable = () -> userService.addUser(username, password, roles);
+        assertThrows(InvalidUsernameException.class, executable);
+        verify(userService).validateUsername(username);
+    }
+
+    /*
+     * Scenario: username already exists
+     */
+    @Test
+    public void testAddUser_6() {
+        String username = "arpit";
+        String password = "password";
+        String role = "role1";
+        Set<String> roles = new HashSet<>();
+        roles.add(role);
+        User user = mock(User.class);
+        doNothing().when(userService).validateUsername(username);
+        doNothing().when(userService).validatePassword(password);
+        when(userRepository.findUserByUsername(username)).thenReturn(user);
+        Executable executable = () -> userService.addUser(username, password, roles);
+        assertThrows(AddUserException.class,executable);
+        verify(userService).validatePassword(password);
+        verify(userService).validateUsername(username);
+        verify(userRepository).findUserByUsername(username);
+    }
 
     /*
      * Scenario: empty username as input
@@ -324,7 +342,7 @@ public class UserServiceImplUnitTest {
         doNothing().when(userService).validateUsername(username);
         when(userRepository.findUserByUsername(username)).thenReturn(null);
         Executable executable = ()-> userService.findUserByUsername(username);
-        Assertions.assertThrows(InvalidUsernameException.class,executable);
+        Assertions.assertThrows(UserNotFoundException.class,executable);
     }
 
 }
