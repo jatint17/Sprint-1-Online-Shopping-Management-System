@@ -21,13 +21,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Autowired
     private UserDetailsService userDetailsService;
 
-    //setting up users
+    /**
+     * setting up users
+     * @param auth
+     * @throws Exception
+     */
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception
     {
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     }
 
+    /**
+     *
+     * @param http
+     * @throws Exception
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception
     {
@@ -48,6 +57,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 invalidateHttpSession(true).logoutSuccessUrl("/logoutsuccess");
     }
 
+    /**
+     *
+     * @return
+     */
     @Bean
     public CorsConfigurationSource corsConfiguration()
     {

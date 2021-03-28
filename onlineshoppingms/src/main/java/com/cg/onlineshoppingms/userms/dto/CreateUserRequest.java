@@ -1,7 +1,5 @@
 package com.cg.onlineshoppingms.userms.dto;
 
-import java.util.Set;
-
 public class CreateUserRequest
 {
     private String username;
