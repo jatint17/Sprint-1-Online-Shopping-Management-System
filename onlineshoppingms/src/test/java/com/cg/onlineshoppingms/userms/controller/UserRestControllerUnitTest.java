@@ -1,8 +1,10 @@
 package com.cg.onlineshoppingms.userms.controller;
 
 import com.cg.onlineshoppingms.userms.dto.CheckCredentialsRequest;
+import com.cg.onlineshoppingms.userms.dto.CreateUserRequest;
 import com.cg.onlineshoppingms.userms.dto.UserDetailsResponse;
 import com.cg.onlineshoppingms.userms.entity.User;
+import com.cg.onlineshoppingms.userms.exceptions.AddUserException;
 import com.cg.onlineshoppingms.userms.exceptions.UserNotFoundException;
 import com.cg.onlineshoppingms.userms.service.IUserService;
 import com.cg.onlineshoppingms.userms.util.UserUtil;
@@ -12,9 +14,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 public class UserRestControllerUnitTest
@@ -96,6 +103,20 @@ public class UserRestControllerUnitTest
         Executable executable = ()-> userController.findByUsername(username);
         Assertions.assertThrows(UserNotFoundException.class,executable);
         verify(userService).findUserByUsername(username);
+    }
+
+    @Test
+    public void testAdd_1()
+    {
+        String username = "arpit";
+        String password = "password";
+        String role = "role1";
+        Set<String>roles = new HashSet<>();
+        roles.add(role);
+        CreateUserRequest request = new CreateUserRequest(username,password,role);
+        doThrow(AddUserException.class).when(userService).addUser(username,password,roles);
+        Executable executable = () -> userController.addUser(request);
+        assertThrows(AddUserException.class,executable);
     }
 
 }
