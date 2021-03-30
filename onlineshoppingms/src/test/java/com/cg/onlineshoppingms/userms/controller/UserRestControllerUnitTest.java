@@ -15,11 +15,11 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,8 +37,8 @@ public class UserRestControllerUnitTest
 
     /**
      * Scenario: credentials are correct
-     * input: mocking IUserService#checkCredentials(username,password), returning true and verifying it is called
-     * expectation: asserting UserController#checkCredentials(request) is true
+     * Input: mocking IUserService#checkCredentials(username,password), returning true and verifying it is called
+     * Expectation: asserting UserController#checkCredentials(request) is true
      */
     @Test
     public void testCheckCredentials_1()
@@ -54,8 +54,8 @@ public class UserRestControllerUnitTest
 
     /**
      * Scenario: credentials are incorrect
-     * input: mocking IUserService#checkCredentials(username,password), returning false and verifying it is called
-     * expectation: asserting UserController#checkCredentials(request) is false
+     * Input: mocking IUserService#checkCredentials(username,password), returning false and verifying it is called
+     * Expectation: asserting UserController#checkCredentials(request) is false
      */
     @Test
     public void testCheckCredentials_2()
@@ -72,9 +72,9 @@ public class UserRestControllerUnitTest
 
     /**
      * Scenario: user found
-     * input: mocking IUserService#findUserByUsername(username), returning User and verifying it is called,
-     * mocking userUtil#toUserDetails(user), returning UserDetailsResponse and verifying it is called
-     * expectation: asserting UserDetailsResponse userDetails and result is same
+     * Input: mocking IUserService#findUserByUsername(username), returning User and verifying it is called,
+     * 		  mocking userUtil#toUserDetails(user), returning UserDetailsResponse and verifying it is called
+     * Expectation: asserting UserDetailsResponse userDetails and result is same
      */
     @Test
     public void testFindByUsername_1()
@@ -92,8 +92,8 @@ public class UserRestControllerUnitTest
 
     /**
      * Scenario: user not found
-     * input: stubbing IUserService#findUserByUsername(username), and throwing UserNotFoundException and verifying it is called
-     * expectation: asserting UserController#findUserByUsername(username) throws UserNotFoundException
+     * Input: stubbing IUserService#findUserByUsername(username), and throwing UserNotFoundException and verifying it is called
+     * Expectation: asserting UserController#findUserByUsername(username) throws UserNotFoundException
      */
     @Test
     public void testFindByUsername_2()
@@ -105,6 +105,11 @@ public class UserRestControllerUnitTest
         verify(userService).findUserByUsername(username);
     }
 
+    /**
+     * Scenario: username already exists in the database
+     * Input: mocking IUserService#addUser(username,password,roles) throwing an AddUserException
+     * Expectation: asserting UserController#addUser(request) throws AddUserException
+     */
     @Test
     public void testAdd_1()
     {
@@ -119,4 +124,23 @@ public class UserRestControllerUnitTest
         assertThrows(AddUserException.class,executable);
     }
 
+    /**
+     * Scenario: userId matches the database, user found
+     * Input: mocking IUserService#findById(userId), returning a User and verifying it is called,
+     * 		  mocking userUtil#toUserDetails(user), returning UserDetailsResponse and verifying it is called
+     * Expectation: asserting UserDetailsResponse userDetails and result is same
+     */
+    @Test
+	public void testFindById_1() 
+	{
+		long userId = 1;
+		User user = mock(User.class);
+		UserDetailsResponse userDetails = mock(UserDetailsResponse.class);
+		when(userService.findById(userId)).thenReturn(user);
+		when(userUtil.toUserDetails(user)).thenReturn(userDetails);
+		UserDetailsResponse result = userController.findById(userId);
+		assertSame(userDetails, result);
+		verify(userService).findById(userId);
+		verify(userUtil).toUserDetails(user);
+	}
 }

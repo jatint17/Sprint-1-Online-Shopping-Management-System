@@ -32,7 +32,8 @@ public class UserRestControllerIntegrationTest
      * Scenario: Credentials match the database
      */
     @Test
-    public void testCheckCredentials_1() {
+    public void testCheckCredentials_1() 
+    {
         String username = "user";
         String password = "password";
         Set<String> roles = new HashSet<>();
