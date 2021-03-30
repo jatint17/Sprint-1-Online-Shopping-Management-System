@@ -244,34 +244,33 @@ public class UserServiceImpIntegrationTest
         Executable executable = ()-> userService.findUserByUsername(enteredUsername);
         assertThrows(UserNotFoundException.class,executable);
     }
-    /**
-     * Scenario: negative userid 
-     */
     
+    /**
+     * Scenario: negative userId 
+     */
     @Test
     public void testFindById_1()
     {
-    	long userid=-1l;
-        Executable executable = ()->userService.findById(userid);
+    	long userId = -1l;
+        Executable executable = ()->userService.findById(userId);
         Assertions.assertThrows(InvalidIdException.class,executable);
     }
     
 
     /**
-     * Scenario: userid does not exist in the database
+     * Scenario: userId does not exist in the database
      */
     @Test
     public void testFindById_2()
     {
-    long  userid=100;
-       Executable executable=()->userService.findById(userid);
-       Assertions.assertThrows(UserNotFoundException.class,executable);
+    	long  userId = 100;
+    	Executable executable=()->userService.findById(userId);
+    	Assertions.assertThrows(UserNotFoundException.class,executable);
    }
-    /**
-     * Scenario: userid exist in database
-     */
-   
     
+    /**
+     * Scenario: userId exist in database
+     */
     @Test
     public void testFindById_3()
     {
@@ -280,13 +279,13 @@ public class UserServiceImpIntegrationTest
         String role = "role";
         Set<String> roles = new HashSet<>();
         roles.add(role);
-  User user = new User(username, password, roles);
-  entityManager.persist(user);
-  Long assignedUserId=user.getUserId();
-  User result=userService.findById(assignedUserId);
-  Assertions.assertNotNull(result);
-  Assertions.assertEquals(assignedUserId,result.getUserId());
-  Assertions.assertEquals(user,result);
+        User user = new User(username, password, roles);
+        entityManager.persist(user);
+        Long assignedUserId=user.getUserId();
+	  	User result=userService.findById(assignedUserId);
+	  	Assertions.assertNotNull(result);
+	  	Assertions.assertEquals(assignedUserId,result.getUserId());
+	  	Assertions.assertEquals(user,result);
    }
 
 }
