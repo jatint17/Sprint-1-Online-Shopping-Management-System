@@ -34,7 +34,9 @@ public class UserServiceImpIntegrationTest
     EntityManager entityManager;
 
     /*
-     * user added successfully
+     * Scenario: user added successfully
+     * input: valid username,valid password, valid set of roles
+     * expectation: verifying if username, password and set of roles stored is the same as the one entered
      */
     @Test
     public void testAddUser_1() {
@@ -53,9 +55,13 @@ public class UserServiceImpIntegrationTest
         assertEquals(username, stored.getUsername());
         assertEquals(password, result.getPassword());
         assertEquals(password, stored.getPassword());
+        assertEquals(roles, result.getRoles());
+        assertEquals(roles, stored.getRoles());
     }
     /*
-     * username is blank
+     * Scenario: user not added successfully because username is blank
+     * input: blank username, valid password and valid set of roles
+     * expectation: verifying if InvalidUsernameException is thrown
      */
     @Test
     public void testAddUser_2() {
@@ -69,7 +75,9 @@ public class UserServiceImpIntegrationTest
     }
 
     /*
-     * password is blank
+     * Scenario: user not added successfully because password is blank
+     * input: valid username, blank password and valid set of roles
+     * expectation: verifying if InvalidPasswordException is thrown
      */
     @Test
     public void testAddUser_3() {
@@ -83,7 +91,9 @@ public class UserServiceImpIntegrationTest
     }
 
     /*
-     * username is null
+     * Scenario: User not added successfully because username is null
+     * input: null username, valid password and valid set of roles
+     * expectation: verifying if InvalidUsernameException is thrown
      */
     @Test
     public void testAddUser_4() {
@@ -97,7 +107,9 @@ public class UserServiceImpIntegrationTest
     }
 
     /*
-     * password is blank
+     * Scenario: user not added successfully because password is null
+     * input: valid username, null password and valid set of roles
+     * expectation: verifying if InvalidPasswordException is thrown
      */
     @Test
     public void testAddUser_5() {
@@ -111,7 +123,9 @@ public class UserServiceImpIntegrationTest
     }
 
     /*
-     * username already exists
+     * Scenario: user not added successfully because username already exists
+     * input: valid username, valid password and valid set of roles
+     * expectation: verifying if AddUserException is thrown
      */
     @Test
     public void testAddUser_6() {

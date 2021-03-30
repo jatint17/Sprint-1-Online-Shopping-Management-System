@@ -27,8 +27,11 @@ public class UserServiceImplUnitTest {
 	@InjectMocks
 	UserServiceImpl userService;
 
-    /*
-     * Scenario: successfully added user
+    /**
+     * Scenario: user added successfully
+     * input: username, password and set of roles and stubbing the following methods-
+     * 		UserServiceImpl# validateUsername(username),UserServiceImpl# validatePassword(password), IUserrepository# findUserByUsername(username), IUserrepository# save(user)
+     * expectation: verifying if all stubbed methods have been called and user is added successfully
      */
     @Test
     public void testAddUser_1() {
@@ -52,8 +55,11 @@ public class UserServiceImplUnitTest {
         verify(userRepository).findUserByUsername(username);
     }
 
-    /*
-     * Scenario: empty username is entered
+    /**
+     * Scenario: user not added successfully because empty username is entered
+     * input: empty username with valid password and set of roles, also stubbing the following methods-
+     * 		UserServiceImpl# validateUsername(username)
+     * expectation: verifying if InvalidUsernameException is thrown 
      */
     @Test
     public void testAddUser_2() {
@@ -68,8 +74,11 @@ public class UserServiceImplUnitTest {
         verify(userService).validateUsername(username);
     }
 
-    /*
-     * Scenario: empty password is entered
+    /**
+     * Scenario: user not added successfully because empty password is entered
+     *  input: empty password with valid username and set of roles, also stubbing the following methods-
+     * 		UserServiceImpl# validatePassword(password)
+     * expectation: verifying if InvalidPasswordException is thrown 
      */
     @Test
     public void testAddUser_3() {
@@ -84,8 +93,11 @@ public class UserServiceImplUnitTest {
         verify(userService).validatePassword(password);
     }
 
-    /*
-     * Scenario: password is null
+    /**
+     * Scenario: user not added successfully because password is null
+     * input: null password with valid username and set of roles, also stubbing the following methods-
+     * 		UserServiceImpl# validatePassword(password)
+     * expectation: verifying if InvalidPasswordException is thrown 
      */
     @Test
     public void testAddUser_4() {
@@ -100,8 +112,11 @@ public class UserServiceImplUnitTest {
         verify(userService).validatePassword(password);
     }
 
-    /*
-     * Scenario: username is null
+    /**
+     * Scenario: user not added successfully because username is null
+     * input: null username with valid password and set of roles, also stubbing the following methods-
+     * 		UserServiceImpl# validateUsername(username)
+     * expectation: verifying InvalidUsernameException is thrown 
      */
     @Test
     public void testAddUser_5() {
@@ -116,8 +131,11 @@ public class UserServiceImplUnitTest {
         verify(userService).validateUsername(username);
     }
 
-    /*
-     * Scenario: username already exists
+    /**
+     * Scenario: user not added successfully because username already exists
+     * input: existing valid username with valid password and set of roles and stubbing the following methods: 
+     * 		UserServiceImpl# validateUsername(username),UserServiceImpl# validatePassword(password), IUserrepository# findUserByUsername(username)
+     * expectation: verifying if AddUserException is thrown 
      */
     @Test
     public void testAddUser_6() {
