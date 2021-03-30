@@ -5,6 +5,8 @@ import com.cg.onlineshoppingms.userms.exceptions.AddUserException;
 import com.cg.onlineshoppingms.userms.exceptions.InvalidPasswordException;
 import com.cg.onlineshoppingms.userms.exceptions.InvalidUsernameException;
 import com.cg.onlineshoppingms.userms.exceptions.UserNotFoundException;
+import com.cg.onlineshoppingms.userms.exceptions.InvalidIdException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -242,4 +244,49 @@ public class UserServiceImpIntegrationTest
         Executable executable = ()-> userService.findUserByUsername(enteredUsername);
         assertThrows(UserNotFoundException.class,executable);
     }
+    /**
+     * Scenario: negative userid 
+     */
+    
+    @Test
+    public void testFindById_1()
+    {
+    	long userid=-1l;
+        Executable executable = ()->userService.findById(userid);
+        Assertions.assertThrows(InvalidIdException.class,executable);
+    }
+    
+
+    /**
+     * Scenario: userid does not exist in the database
+     */
+    @Test
+    public void testFindById_2()
+    {
+    long  userid=100;
+       Executable executable=()->userService.findById(userid);
+       Assertions.assertThrows(UserNotFoundException.class,executable);
+   }
+    /**
+     * Scenario: userid exist in database
+     */
+   
+    
+    @Test
+    public void testFindById_3()
+    {
+    	String username = "user";
+        String password = "password";
+        String role = "role";
+        Set<String> roles = new HashSet<>();
+        roles.add(role);
+  User user = new User(username, password, roles);
+  entityManager.persist(user);
+  Long assignedUserId=user.getUserId();
+  User result=userService.findById(assignedUserId);
+  Assertions.assertNotNull(result);
+  Assertions.assertEquals(assignedUserId,result.getUserId());
+  Assertions.assertEquals(user,result);
+   }
+
 }
