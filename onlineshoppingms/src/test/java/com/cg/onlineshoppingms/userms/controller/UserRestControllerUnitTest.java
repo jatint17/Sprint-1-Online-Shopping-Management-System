@@ -5,6 +5,7 @@ import com.cg.onlineshoppingms.userms.dto.CreateUserRequest;
 import com.cg.onlineshoppingms.userms.dto.UserDetailsResponse;
 import com.cg.onlineshoppingms.userms.entity.User;
 import com.cg.onlineshoppingms.userms.exceptions.AddUserException;
+import com.cg.onlineshoppingms.userms.exceptions.InvalidIdException;
 import com.cg.onlineshoppingms.userms.exceptions.UserNotFoundException;
 import com.cg.onlineshoppingms.userms.service.IUserService;
 import com.cg.onlineshoppingms.userms.util.UserUtil;
@@ -142,5 +143,30 @@ public class UserRestControllerUnitTest
 		assertSame(userDetails, result);
 		verify(userService).findById(userId);
 		verify(userUtil).toUserDetails(user);
+	}
+    
+
+    /**
+     * Scenario: user not found
+     */
+    @Test
+    public void testFindById_2() 
+    {
+        long userId=100;
+        doThrow(UserNotFoundException.class).when(userService).findById(userId);
+        Executable executable = ()-> userController.findById(userId);
+        Assertions.assertThrows(UserNotFoundException.class,executable);
+        verify(userService).findById(userId);
+    }
+    /**
+	 * Scenario: userid is negative
+	 */
+	@Test
+	public void testFindById_3()
+	{
+		long userId=-1;
+		doThrow(InvalidIdException.class).when(userService).findById(userId);
+		Executable executable=()->userService.findById(userId);
+		Assertions.assertThrows(InvalidIdException.class, executable);
 	}
 }
