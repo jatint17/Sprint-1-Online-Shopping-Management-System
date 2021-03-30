@@ -1,15 +1,13 @@
 package com.cg.onlineshoppingms.userms.dto;
 
-public class CreateUserRequest
+public class CheckCredentialsRequest
 {
     private String username;
     private String password;
-    private String role;
 
-    public CreateUserRequest(String username, String password, String role) {
+    public CheckCredentialsRequest(String username, String password) {
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 
     public String getUsername() {
@@ -26,13 +24,5 @@ public class CreateUserRequest
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 }

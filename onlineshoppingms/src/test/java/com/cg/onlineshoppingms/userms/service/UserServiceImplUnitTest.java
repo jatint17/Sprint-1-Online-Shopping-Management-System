@@ -20,7 +20,9 @@ import java.util.Set;
 
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceImplUnitTest {
+public class UserServiceImplUnitTest
+{
+
 	@Mock
 	IUserRepository userRepository;
 	@Spy
@@ -211,7 +213,7 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: password is empty
-     * input: username and empty password in IUserService##checkCredentials(username,password)
+     * input: username and empty password in IUserService#checkCredentials(username,password)
      * expectation: asserting IUserService##checkCredentials(username,password) is false
      */
     @Test
@@ -225,8 +227,8 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: username does not match the database
-     * input: mocking IUserRepository#findUserByUsername(username), returning null
-     * expectation: asserting IUserService##checkCredentials(enteredUsername,password) is false and verifying it is called
+     * input: mocking IUserRepository#findUserByUsername(username), returning null and verifying it is called
+     * expectation: asserting IUserService##checkCredentials(enteredUsername,password) is false
      */
     @Test
     public void testCheckCredentials_3()
@@ -245,8 +247,8 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: password does not match the database
-     * input: mocking IUserRepository#findUserByUsername(username), returning user
-     * expectation: asserting IUserService#checkCredentials(username,enteredPassword) is false and verifying it is called
+     * input: mocking IUserRepository#findUserByUsername(username), returning user and verifying it is called
+     * expectation: asserting IUserService#checkCredentials(username,enteredPassword) is false
      */
     @Test
     public void testCheckCredentials_4()
@@ -264,9 +266,9 @@ public class UserServiceImplUnitTest {
     }
 
     /**
-     * Scenario: credentials are matching
-     * input: mocking IUserRepository#findUserByUsername(username), returning user
-     * expectation: asserting IUserService#checkCredentials(username,password) is true and verifying it is called
+     * Scenario: credentials are matching the database
+     * input: mocking IUserRepository#findUserByUsername(username), returning user and verifying it is called
+     * expectation: asserting IUserService#checkCredentials(username,password) is true
      */
     @Test
     public void testCheckCredentials_5()
@@ -329,7 +331,7 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: user exists
-     * input: stubbing validateUsername method, mocking IUserRepository#findUserByUsername(username), returning saved user
+     * input: stubbing validateUsername method, mocking IUserRepository#findUserByUsername(username), returning saved user and verifying it is called
      * expectation: asserting IUserService#findUserByUsername(username) is not null, saved user and result user are equal
      */
     @Test
@@ -342,11 +344,12 @@ public class UserServiceImplUnitTest {
         User result = userService.findUserByUsername(username);
         Assertions.assertNotNull(result);
         Assertions.assertEquals(saved,result);
+        verify(userRepository).findUserByUsername(username);
     }
 
     /**
      * Scenario: user does not exist
-     * input: stubbing validateUsername method, mocking IUserRepository#findUserByUsername(username), returning null
+     * input: stubbing validateUsername method, mocking IUserRepository#findUserByUsername(username), returning null and verifying it is called
      * expectation: asserting IUserService#findUserByUsername(username) throws UserNotFoundException
      */
     @Test
@@ -357,6 +360,7 @@ public class UserServiceImplUnitTest {
         when(userRepository.findUserByUsername(username)).thenReturn(null);
         Executable executable = ()-> userService.findUserByUsername(username);
         Assertions.assertThrows(UserNotFoundException.class,executable);
+        verify(userRepository).findUserByUsername(username);
     }
 
 }
