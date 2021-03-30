@@ -1,6 +1,7 @@
 package com.cg.onlineshoppingms.userms.controller;
 
 
+import com.cg.onlineshoppingms.userms.dto.CheckCredentialsRequest;
 import com.cg.onlineshoppingms.userms.dto.CreateUserRequest;
 import com.cg.onlineshoppingms.userms.dto.UserDetailsResponse;
 import com.cg.onlineshoppingms.userms.entity.User;
@@ -61,6 +62,17 @@ public class UserController
     {
         User user = userService.findUserByUsername(username);
         return userUtil.toUserDetails(user);
+    }
+
+    /**
+     * returns true if the credentials match the database, else false
+     * @param request
+     * @return
+     */
+    @GetMapping("/p/users/checkcredentials")
+    public boolean checkCredentials(@RequestBody CheckCredentialsRequest request)
+    {
+        return userService.checkCredentials(request.getUsername(),request.getPassword());
     }
 
     /**
