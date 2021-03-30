@@ -127,6 +127,8 @@ public class UserServiceImpIntegrationTest
 
     /**
      * Scenario: Username is empty
+     * Input: empty username on userService#checkCredentials(username,password)
+     * Output: Assert the result to be false
      */
     @Test
     public void testCheckCredentials_1() {
@@ -138,6 +140,8 @@ public class UserServiceImpIntegrationTest
 
     /**
      * Scenario: Password is empty
+     * Input: empty password on userService#checkCredentials(username,password)
+     * Output: Assert the result to be false
      */
     @Test
     public void testCheckCredentials_2() {
@@ -149,6 +153,8 @@ public class UserServiceImpIntegrationTest
 
     /**
      * Scenario: username does not match the database
+     * Input: wrong username on userService#checkCredentials(username,password)
+     * Output: Assert the result to be false
      */
     @Test
     public void testCheckCredentials_3() {
@@ -165,6 +171,8 @@ public class UserServiceImpIntegrationTest
 
     /**
      * Scenario: password does not match the database
+     * Input: wrong password on userService#checkCredentials(username,password)
+     * Output: Assert the result to be false
      */
     @Test
     public void testCheckCredentials_4() {
@@ -181,6 +189,8 @@ public class UserServiceImpIntegrationTest
 
     /**
      * Scenario: credentials are matching
+     * Input: correct username and password on userService#checkCredentials(username,password)
+     * Output: Assert the result to be true
      */
     @Test
     public void testCheckCredentials_5()
@@ -196,7 +206,9 @@ public class UserServiceImpIntegrationTest
     }
 
     /**
-     * Scenario: user exists
+     * Scenario: user exists in the database
+     * Input: correct username on userService#findUserByUsername(username)
+     * Output: Assert the result to be not null and assert saved user and result user to be equal
      */
     @Test
     public void testFindUserByUsername_1()
@@ -213,7 +225,9 @@ public class UserServiceImpIntegrationTest
     }
 
     /**
-     * Scenario: user does not exist
+     * Scenario: user does not exist in the database
+     * Input: incorrect username on userService#findUserByUsername(enteredUsername)
+     * Output: Assert the result to throw UserNotFoundException
      */
     @Test
     public void testFindUserByUsername_2()
