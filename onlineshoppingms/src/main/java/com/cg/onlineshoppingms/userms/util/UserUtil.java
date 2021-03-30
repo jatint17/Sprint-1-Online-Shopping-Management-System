@@ -8,6 +8,11 @@ import org.springframework.stereotype.Component;
 public class UserUtil
 {
 
+    /**
+     * utility method to convert the entity object, User, to it's details class, UserDetailsResponse.
+     * @param user
+     * @return
+     */
     public UserDetailsResponse toUserDetails(User user)
     {
         UserDetailsResponse userDetails=new UserDetailsResponse(user.getUserId(), user.getUsername(),

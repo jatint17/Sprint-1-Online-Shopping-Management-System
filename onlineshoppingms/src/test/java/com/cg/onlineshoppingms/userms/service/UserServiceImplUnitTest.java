@@ -197,6 +197,8 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: username is empty
+     * input: empty username and password in IUserService##checkCredentials(username,password)
+     * expectation: asserting IUserService##checkCredentials(username,password) is false
      */
     @Test
     public void testCheckCredentials_1()
@@ -209,6 +211,8 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: password is empty
+     * input: username and empty password in IUserService##checkCredentials(username,password)
+     * expectation: asserting IUserService##checkCredentials(username,password) is false
      */
     @Test
     public void testCheckCredentials_2()
@@ -221,6 +225,8 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: username does not match the database
+     * input: mocking IUserRepository#findUserByUsername(username), returning null
+     * expectation: asserting IUserService##checkCredentials(enteredUsername,password) is false and verifying it is called
      */
     @Test
     public void testCheckCredentials_3()
@@ -239,6 +245,8 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: password does not match the database
+     * input: mocking IUserRepository#findUserByUsername(username), returning user
+     * expectation: asserting IUserService#checkCredentials(username,enteredPassword) is false and verifying it is called
      */
     @Test
     public void testCheckCredentials_4()
@@ -257,6 +265,8 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: credentials are matching
+     * input: mocking IUserRepository#findUserByUsername(username), returning user
+     * expectation: asserting IUserService#checkCredentials(username,password) is true and verifying it is called
      */
     @Test
     public void testCheckCredentials_5()
@@ -319,6 +329,8 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: user exists
+     * input: stubbing validateUsername method, mocking IUserRepository#findUserByUsername(username), returning saved user
+     * expectation: asserting IUserService#findUserByUsername(username) is not null, saved user and result user are equal
      */
     @Test
     public void testFindUserByUsername_1()
@@ -334,6 +346,8 @@ public class UserServiceImplUnitTest {
 
     /**
      * Scenario: user does not exist
+     * input: stubbing validateUsername method, mocking IUserRepository#findUserByUsername(username), returning null
+     * expectation: asserting IUserService#findUserByUsername(username) throws UserNotFoundException
      */
     @Test
     public void testFindUserByUsername_2()

@@ -20,7 +20,6 @@ public class UserController
 
     @Autowired
     private IUserService userService;
-
     @Autowired
     private UserUtil userUtil;
 
@@ -52,6 +51,22 @@ public class UserController
         return userUtil.toUserDetails(user);
     }
 
+    /**
+     * finds user from database by username and returns it's details.
+     * @param username
+     * @return
+     */
+    @GetMapping("/p/users/byusername/{username}")
+    public UserDetailsResponse findByUsername(@PathVariable("username") String username)
+    {
+        User user = userService.findUserByUsername(username);
+        return userUtil.toUserDetails(user);
+    }
+
+    /**
+     * displays a success message when login is successful.
+     * @return
+     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/success")
     public String loginSuccess()
@@ -59,12 +74,20 @@ public class UserController
         return "Login Successful!";
     }
 
+    /**
+     * displays a failure message when login fails.
+     * @return
+     */
     @GetMapping("/loginfail")
     public String loginFail()
     {
         return "Login failed!";
     }
 
+    /**
+     * displays a success message when logout is successful.
+     * @return
+     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/logoutsuccess")
     public String logout()
