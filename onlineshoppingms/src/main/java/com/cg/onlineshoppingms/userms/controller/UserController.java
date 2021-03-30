@@ -9,13 +9,9 @@ import com.cg.onlineshoppingms.userms.service.IUserService;
 import com.cg.onlineshoppingms.userms.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.validation.Valid;
-
 
 @RestController
 public class UserController
