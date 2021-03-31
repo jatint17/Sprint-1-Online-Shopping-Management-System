@@ -3,11 +3,14 @@ package com.cg.onlineshoppingms.userms.controller;
 import com.cg.onlineshoppingms.userms.dto.CheckCredentialsRequest;
 import com.cg.onlineshoppingms.userms.dto.UserDetailsResponse;
 import com.cg.onlineshoppingms.userms.entity.User;
+import com.cg.onlineshoppingms.userms.exceptions.InvalidIdException;
+import com.cg.onlineshoppingms.userms.exceptions.UserNotFoundException;
 import com.cg.onlineshoppingms.userms.service.UserServiceImpl;
 import com.cg.onlineshoppingms.userms.util.UserUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -63,4 +66,26 @@ public class UserRestControllerIntegrationTest
     	Assertions.assertEquals(username, response.getUsername());
     	Assertions.assertEquals(roles, response.getRoles());
     }
+    /**
+     * Scenario: negative userId 
+     */
+    @Test
+    public void testFindById_2()
+    {
+    	long userId = -1l;
+        Executable executable = ()-> userController.findById(userId);
+        Assertions.assertThrows(InvalidIdException.class,executable);
+    }
+    
+
+    /**
+     * Scenario: userId does not exist in the database
+     */
+    @Test
+    public void testFindById_3()
+    {
+    	long  userId = 100;
+    	Executable executable=()-> userController.findById(userId);
+    	Assertions.assertThrows(UserNotFoundException.class,executable);
+   }
 }

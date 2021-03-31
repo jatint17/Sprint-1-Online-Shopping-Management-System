@@ -1,10 +1,11 @@
 package com.cg.onlineshoppingms.userms.controller;
 
 import com.cg.onlineshoppingms.userms.dto.CheckCredentialsRequest;
-import com.cg.onlineshoppingms.userms.dto.CreateUserRequest;
+import com.cg.onlineshoppingms.userms.dto.AddRequest;
 import com.cg.onlineshoppingms.userms.dto.UserDetailsResponse;
 import com.cg.onlineshoppingms.userms.entity.User;
 import com.cg.onlineshoppingms.userms.exceptions.AddUserException;
+import com.cg.onlineshoppingms.userms.exceptions.InvalidIdException;
 import com.cg.onlineshoppingms.userms.exceptions.InvalidPasswordException;
 import com.cg.onlineshoppingms.userms.exceptions.InvalidUsernameException;
 import com.cg.onlineshoppingms.userms.exceptions.UserNotFoundException;
@@ -116,18 +117,18 @@ public class UserRestControllerUnitTest
      * expectation: verifying if all stubbed methods have been called and user is added successfully
 	 */
 	@Test
-	public void testAddUser_1() {
+	public void testAddAdmin_1() {
 		String username = "username";
 		String password = "password";
 		String role = "admin";
 		Set<String> roles = new HashSet<>();
 		roles.add(role);
-		CreateUserRequest request = new CreateUserRequest(username, password, role);
+		AddRequest request = new AddRequest(username, password);
 		User user = mock(User.class);
 		when(userService.addUser(username, password, roles)).thenReturn(user);
 		UserDetailsResponse details = mock(UserDetailsResponse.class);
 		when(userUtil.toUserDetails(user)).thenReturn(details);
-		UserDetailsResponse response = userController.addUser(request);
+		UserDetailsResponse response = userController.addAdmin(request);
 		assertEquals(details, response);
 		verify(userService).addUser(username, password, roles);
 		verify(userUtil).toUserDetails(user);
@@ -140,15 +141,15 @@ public class UserRestControllerUnitTest
 	 * expectation: verifying if InvalidUsernameException is thrown
 	 */
 	@Test
-	public void testAddUser_2() {
+	public void testAddAdmin_2() {
 		String username = "";
 		String password = "password";
 		String role = "admin";
 		Set<String> roles = new HashSet<>();
 		roles.add(role);
-		CreateUserRequest request = new CreateUserRequest(username, password, role);
+		AddRequest request = new AddRequest(username, password);
 		doThrow(InvalidUsernameException.class).when(userService).addUser(username, password, roles);
-		Executable executable = ()-> userController.addUser(request);
+		Executable executable = ()-> userController.addAdmin(request);
 		assertThrows(InvalidUsernameException.class, executable);
 		verify(userService).addUser(username, password, roles);
 	}
@@ -160,15 +161,15 @@ public class UserRestControllerUnitTest
 	 * expectation: verifying if InvalidPasswordException is thrown
 	 */
 	@Test
-	public void testAddUser_3() {
+	public void testAddAdmin_3() {
 		String username = "username";
 		String password = "";
 		String role = "admin";
 		Set<String> roles = new HashSet<>();
 		roles.add(role);
-		CreateUserRequest request = new CreateUserRequest(username, password, role);
+		AddRequest request = new AddRequest(username, password);
 		doThrow(InvalidPasswordException.class).when(userService).addUser(username, password, roles);
-		Executable executable = ()-> userController.addUser(request);
+		Executable executable = ()-> userController.addAdmin(request);
 		assertThrows(InvalidPasswordException.class, executable);
 		verify(userService).addUser(username, password, roles);
 	}
@@ -180,15 +181,15 @@ public class UserRestControllerUnitTest
 	 * expectation: verifying if InvalidUsernameException is thrown
 	 */
 	@Test
-	public void testAddUser_4() {
+	public void testAddAdmin_4() {
 		String username = null;
 		String password = "password";
 		String role = "admin";
 		Set<String> roles = new HashSet<>();
 		roles.add(role);
-		CreateUserRequest request = new CreateUserRequest(username, password, role);
+		AddRequest request = new AddRequest(username, password);
 		doThrow(InvalidUsernameException.class).when(userService).addUser(username, password, roles);
-		Executable executable = ()-> userController.addUser(request);
+		Executable executable = ()-> userController.addAdmin(request);
 		assertThrows(InvalidUsernameException.class, executable);
 		verify(userService).addUser(username, password, roles);
 	}
@@ -200,15 +201,15 @@ public class UserRestControllerUnitTest
 	 * expectation: verifying if InvalidPasswordException is thrown
 	 */
 	@Test
-	public void testAddUser_5() {
+	public void testAddAdmin_5() {
 		String username = "username";
 		String password = null;
 		String role = "admin";
 		Set<String> roles = new HashSet<>();
 		roles.add(role);
-		CreateUserRequest request = new CreateUserRequest(username, password, role);
+		AddRequest request = new AddRequest(username, password);
 		doThrow(InvalidPasswordException.class).when(userService).addUser(username, password, roles);
-		Executable executable = ()-> userController.addUser(request);
+		Executable executable = ()-> userController.addAdmin(request);
 		assertThrows(InvalidPasswordException.class, executable);
 		verify(userService).addUser(username, password, roles);
 	}
@@ -220,20 +221,20 @@ public class UserRestControllerUnitTest
 	 * expectation: verifying if AddUserException is thrown
 	 */
 	@Test
-	public void testAddUser_6() {
+	public void testAddAdmin_6() {
 		String username = "username";
 		String password = "password";
 		String role = "admin";
 		Set<String> roles = new HashSet<>();
 		roles.add(role);
-		CreateUserRequest request = new CreateUserRequest(username, password, role);
+		AddRequest request = new AddRequest(username, password);
 		doThrow(AddUserException.class).when(userService).addUser(username, password, roles);
-		Executable executable = ()-> userController.addUser(request);
+		Executable executable = ()-> userController.addAdmin(request);
 		assertThrows(AddUserException.class, executable);
 		verify(userService).addUser(username, password, roles);
 	}
 
-    /**
+	/**
      * Scenario: userId matches the database, user found
      * Input: mocking IUserService#findById(userId), returning a User and verifying it is called,
      * 		  mocking userUtil#toUserDetails(user), returning UserDetailsResponse and verifying it is called
@@ -251,5 +252,30 @@ public class UserRestControllerUnitTest
 		assertSame(userDetails, result);
 		verify(userService).findById(userId);
 		verify(userUtil).toUserDetails(user);
+	}
+    
+
+    /**
+     * Scenario: user not found
+     */
+    @Test
+    public void testFindById_2() 
+    {
+        long userId=100;
+        doThrow(UserNotFoundException.class).when(userService).findById(userId);
+        Executable executable = ()-> userController.findById(userId);
+        Assertions.assertThrows(UserNotFoundException.class,executable);
+        verify(userService).findById(userId);
+    }
+    /**
+	 * Scenario: userid is negative
+	 */
+	@Test
+	public void testFindById_3()
+	{
+		long userId=-1;
+		doThrow(InvalidIdException.class).when(userService).findById(userId);
+		Executable executable=()->userService.findById(userId);
+		Assertions.assertThrows(InvalidIdException.class, executable);
 	}
 }

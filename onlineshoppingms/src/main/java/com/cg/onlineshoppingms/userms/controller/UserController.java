@@ -2,7 +2,7 @@ package com.cg.onlineshoppingms.userms.controller;
 
 
 import com.cg.onlineshoppingms.userms.dto.CheckCredentialsRequest;
-import com.cg.onlineshoppingms.userms.dto.CreateUserRequest;
+import com.cg.onlineshoppingms.userms.dto.AddRequest;
 import com.cg.onlineshoppingms.userms.dto.UserDetailsResponse;
 import com.cg.onlineshoppingms.userms.entity.User;
 import com.cg.onlineshoppingms.userms.service.IUserService;
@@ -23,25 +23,25 @@ public class UserController
     private UserUtil userUtil;
 
     /**
-     * saves a new unique user in the database.
+     * saves a new admin in the database.
      * @param request
-     * @return
+     * @return UserDetailsResponse
      */
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/p/users/add")
-    public UserDetailsResponse addUser(@RequestBody CreateUserRequest request)
+    @PostMapping("/a/admin/add")
+    public UserDetailsResponse addAdmin(@RequestBody AddRequest request)
     {
-        Set<String> roles = new HashSet<>();
-        roles.add(request.getRole());
-        User user = userService.addUser(request.getUsername(), request.getPassword(), roles);
-        UserDetailsResponse response = userUtil.toUserDetails(user);
-        return response;
+    	Set<String> roles = new HashSet<>();
+    	roles.add("admin");
+    	User user = userService.addUser(request.getUsername(), request.getPassword(), roles);
+    	UserDetailsResponse response = userUtil.toUserDetails(user);
+    	return response;
     }
-
+    
     /**
      * finds user from database by userId and returns it's details.
      * @param userId
-     * @return
+     * @return UserDetailsResponse
      */
     @GetMapping("/c/users/byid/{id}")
     public UserDetailsResponse findById(@PathVariable("id") Long userId)
@@ -53,7 +53,7 @@ public class UserController
     /**
      * finds user from database by username and returns it's details.
      * @param username
-     * @return
+     * @return UserDetailsResponse
      */
     @GetMapping("/p/users/byusername/{username}")
     public UserDetailsResponse findByUsername(@PathVariable("username") String username)
@@ -65,7 +65,7 @@ public class UserController
     /**
      * returns true if the credentials match the database, else false
      * @param request
-     * @return
+     * @return UserDetailsResponse
      */
     @GetMapping("/p/users/checkcredentials")
     public boolean checkCredentials(@RequestBody CheckCredentialsRequest request)
@@ -75,7 +75,7 @@ public class UserController
 
     /**
      * displays a success message when login is successful.
-     * @return
+     * @return UserDetailsResponse
      */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/success")
@@ -86,7 +86,7 @@ public class UserController
 
     /**
      * displays a failure message when login fails.
-     * @return
+     * @return UserDetailsResponse
      */
     @GetMapping("/loginfail")
     public String loginFail()
@@ -96,7 +96,7 @@ public class UserController
 
     /**
      * displays a success message when logout is successful.
-     * @return
+     * @return UserDetailsResponse
      */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/logoutsuccess")
