@@ -1,8 +1,12 @@
 package com.cg.onlineshoppingms.productms.entities;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import com.cg.onlineshoppingms.userms.entity.User;
 
 @Entity
 public class Product
@@ -41,5 +45,18 @@ public class Product
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
