@@ -4,7 +4,8 @@ public class AddRequest
 {
     private String username;
     private String password;
-
+    
+    public AddRequest() {}
     public AddRequest(String username, String password) {
         this.username = username;
         this.password = password;

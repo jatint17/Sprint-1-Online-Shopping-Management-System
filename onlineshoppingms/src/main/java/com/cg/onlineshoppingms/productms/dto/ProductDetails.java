@@ -6,6 +6,7 @@ public class ProductDetails
     private String productName;
     private double price;
 
+    public ProductDetails() {}
     public ProductDetails(Long productId, String productName, double price) {
         this.productId = productId;
         this.productName = productName;
