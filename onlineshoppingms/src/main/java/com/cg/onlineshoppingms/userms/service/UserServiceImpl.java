@@ -62,27 +62,7 @@ public class UserServiceImpl implements IUserService, UserDetailsService
         return user;
     }
 
-    /**
-     * checks the username and password of the user from database and returns true if credentials match, else returns false
-     * @param username
-     * @param password
-     * @return
-     */
-    @Override
-    public boolean checkCredentials(String username, String password)
-    {
-        if (username == null || username.isEmpty() || password == null || password.isEmpty())
-        {
-            return false;
-        }
-        User user = userRepository.findUserByUsername(username);
-        if (user == null)
-        {
-            return false;
-        }
-        boolean result = user.getUsername().equals(username) && user.getPassword().equals(password);
-        return result;
-    }
+
 
     /**
      * finds and returns user by username from database, throws UserNotFoundException if user does not exist.

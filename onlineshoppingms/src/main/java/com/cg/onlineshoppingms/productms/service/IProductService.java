@@ -5,6 +5,5 @@ import com.cg.onlineshoppingms.productms.entities.Product;
 public interface IProductService
 {
     Product add(String name, double price);
-    Product updatePrice(long productId, double price);
     Product findById(long id);
 }

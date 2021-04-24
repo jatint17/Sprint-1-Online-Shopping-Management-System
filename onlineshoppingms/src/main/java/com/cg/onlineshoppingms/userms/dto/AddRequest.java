@@ -1,10 +1,21 @@
 package com.cg.onlineshoppingms.userms.dto;
 
-public class CreateUserRequest
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+public class AddRequest
 {
+	@NotBlank
     private String username;
+	@NotBlank
+	@Size(min=4)
     private String password;
-    private String role;
+	
+	public AddRequest() {}
+    public AddRequest(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public String getUsername() {
         return username;
@@ -22,11 +33,4 @@ public class CreateUserRequest
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }

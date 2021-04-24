@@ -16,24 +16,26 @@ public class ProductServiceImpl implements IProductService
     @Autowired
     private IProductRepository productRepository;
 
+    /**
+     * adds a new product in the database.
+     * @param name
+     * @param price
+     * @return
+     */
     @Transactional
     @Override
     public Product add(String name, double price)
     {
         validateName(name);
-        Product product = new Product(name,price);
+        Product product = new Product(name, price);
         return productRepository.save(product);
     }
 
-    @Transactional
-    @Override
-    public Product updatePrice(long productId, double price)
-    {
-        Product product = findById(productId);
-        product.setPrice(price);
-        return productRepository.save(product);
-    }
-
+    /**
+     * finds and returns a product by productId
+     * @param id
+     * @return
+     */
     @Override
     public Product findById(long id)
     {
@@ -46,6 +48,10 @@ public class ProductServiceImpl implements IProductService
         return optional.get();
     }
 
+    /**
+     * validates and throws InvalidIdException if the id is negative.
+     * @param id
+     */
     public void validateId(long id)
     {
         if(id<0)
@@ -54,6 +60,10 @@ public class ProductServiceImpl implements IProductService
         }
     }
 
+    /**
+     * validates and throws InvalidNameException if the name is null or empty.
+     * @param name
+     */
     public void validateName(String name)
     {
         if (name == null || name.isEmpty() || name.trim().isEmpty())
@@ -61,4 +71,6 @@ public class ProductServiceImpl implements IProductService
             throw new InvalidNameException("Username cannot be null or empty");
         }
     }
+    
+   
 }
