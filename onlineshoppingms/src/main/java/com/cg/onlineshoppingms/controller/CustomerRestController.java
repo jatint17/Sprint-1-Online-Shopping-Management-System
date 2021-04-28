@@ -42,7 +42,7 @@ public class CustomerRestController
     {
         Customer customer = customerService.findById(customerId);
         return customerUtil.toCustomerDetails(customer);
-    }
+    }   
 
     /**
      *
