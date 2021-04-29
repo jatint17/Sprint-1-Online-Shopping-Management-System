@@ -5,6 +5,9 @@ import com.cg.onlineshoppingms.productms.exceptions.InvalidIdException;
 import com.cg.onlineshoppingms.productms.exceptions.InvalidNameException;
 import com.cg.onlineshoppingms.productms.exceptions.ProductNotFoundException;
 import com.cg.onlineshoppingms.productms.repository.IProductRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +16,7 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements IProductService
 {
+	private static final Logger Log = LoggerFactory.getLogger(ProductServiceImpl.class);
     @Autowired
     private IProductRepository productRepository;
 
@@ -27,6 +31,7 @@ public class ProductServiceImpl implements IProductService
     public Product add(String name, double price)
     {
         validateName(name);
+        Log.debug("inside add method in product service with product name: "+name+" and price: "+price);
         Product product = new Product(name, price);
         return productRepository.save(product);
     }
@@ -40,6 +45,7 @@ public class ProductServiceImpl implements IProductService
     public Product findById(long id)
     {
         validateId(id);
+        Log.debug("inside add method in product service with product id: "+id);
         Optional<Product> optional = productRepository.findById(id);
         if(!optional.isPresent())
         {
