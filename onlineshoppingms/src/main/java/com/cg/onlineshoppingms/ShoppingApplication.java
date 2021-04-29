@@ -5,20 +5,18 @@ import java.util.Set;
 import com.cg.onlineshoppingms.adminms.service.IAdminService;
 import com.cg.onlineshoppingms.customerms.service.ICustomerService;
 import com.cg.onlineshoppingms.productms.service.IProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-
-import com.cg.onlineshoppingms.userms.entity.User;
-import com.cg.onlineshoppingms.userms.service.IUserService;
 
 @SpringBootApplication
 public class ShoppingApplication
 {
+
+    public static final Logger log = LoggerFactory.getLogger(ShoppingApplication.class);
+
     public static void main(String[] args)
     {
         ConfigurableApplicationContext context = SpringApplication.run(ShoppingApplication.class, args);
@@ -30,7 +28,13 @@ public class ShoppingApplication
         adminService.add("admin", "admin");
         customerService.addCustomer("customer","custpass");
         productService.add("Nike",2300.0);
-        System.out.println("-------started------");
+
+        log.debug("****i am logged using debug level");
+        log.info("****i am logged using info level");
+        log.error("****i am logged using error level");
+
+        log.info("-------started------");
+
     }
 
 }

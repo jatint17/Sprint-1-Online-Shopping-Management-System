@@ -1,5 +1,6 @@
 package com.cg.onlineshoppingms.controller;
 
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ public class CustomerRestController
 	@Autowired
 	private CustomerUtil customerUtil;
 	
+	public static final Logger log = LoggerFactory.getLogger(CustomerRestController.class);
+	
 	/**
      * saves a new unique customer in the database.
      * @param request
@@ -27,6 +30,8 @@ public class CustomerRestController
     @PostMapping("/p/customers/add")
     public CustomerDetails addCustomer(@RequestBody AddRequest request)
     {
+    	log.info("inside addCustomer rest controller "+request.getUsername()+" "+request.getPassword());
+    	
         Customer customer = customerService.addCustomer(request.getUsername(), request.getPassword());
         CustomerDetails response = customerUtil.toCustomerDetails(customer);
         return response;
@@ -40,6 +45,8 @@ public class CustomerRestController
     @GetMapping("/c/customers/byid/{id}")
     public CustomerDetails findById(@PathVariable("id") Long customerId)
     {
+    	log.info("inside findbyId rest controller "+customerId);
+    	
         Customer customer = customerService.findById(customerId);
         return customerUtil.toCustomerDetails(customer);
     }   
@@ -50,8 +57,11 @@ public class CustomerRestController
      * @return
      */
     @GetMapping("/c/customers/byusername/{username}")
-    public CustomerDetails findByUsername(@PathVariable String username){
-       Customer customer= customerService.findByUsername(username);
+    public CustomerDetails findByUsername(@PathVariable String username)
+    {
+    	log.info("inside findByUsername rest contoller "+username);
+    	
+    	Customer customer= customerService.findByUsername(username);
         return customerUtil.toCustomerDetails(customer);
     }
 
