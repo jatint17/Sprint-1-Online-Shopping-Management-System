@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import static org.mockito.Mockito.*;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -157,8 +156,92 @@ public class UserServiceImplUnitTest
         verify(userRepository).findUserByUsername(username);
     }
 
+	/**
+	 * Scenario: userid is negative
+     * input: negative userId entered, mocking the #userService.validateid method, throwing InvalidIdException
+     * expectation: verifying if InvalidIdException is thrown
+	 */
+	@Test
+	public void testFindById_1()
+	{
+		long userId=-1;
+		doThrow(InvalidIdException.class).when(userService).validateId(userId);
+		Executable executable=()->userService.findById(userId);
+		Assertions.assertThrows(InvalidIdException.class, executable);
+	}
+
+
+	/**
+	 * Scenario: userid does not exist in the database
+     * input: wrong userId entered, mocking the #userService.validateId method, mocking #userRepository.findById() returning an empty optional
+     * expectation: verifying if UserNotFoundException is thrown
+     */
+
+	@Test
+	public void testFindById_2()
+	{
+		long userId=100;
+		doNothing().when(userService).validateId(userId);
+		Optional<User> optional = Optional.empty();
+		when(userRepository.findById(userId)).thenReturn(optional);
+		Executable executable=()->userService.findById(userId);
+		Assertions.assertThrows(UserNotFoundException.class,executable);
+	}
+	/**
+	 * Scenario: userid exist in the database
+     * input: correct userId entered, mocking the #userService.validateId method, mocking #userRepository.findById() returning an optional
+     * expectation: verifying if #userService.findById() result is equal to user
+     */
+	@Test
+	public void testFindById_3()
+	{
+		long userid=3;
+		doNothing().when(userService).validateId(userid);
+		User user=mock(User.class);
+		Optional<User>optional = Optional.of(user);
+		when (userRepository.findById(userid)).thenReturn(optional);
+		User result=userService.findById(userid);
+		Assertions.assertEquals(user,result);
+		verify (userRepository).findById(userid);
+	}
+
+    /**
+     * Scenario: user exists
+     * input: stubbing validateUsername method, mocking IUserRepository#findUserByUsername(username), returning saved user and verifying it is called
+     * expectation: asserting IUserService#findUserByUsername(username) is not null, saved user and result user are equal
+     */
+    @Test
+    public void testFindUserByUsername_1()
+    {
+        String username="user";
+        User saved = mock(User.class);
+        doNothing().when(userService).validateUsername(username);
+        when(userRepository.findUserByUsername(username)).thenReturn(saved);
+        User result = userService.findUserByUsername(username);
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(saved,result);
+        verify(userRepository).findUserByUsername(username);
+    }
+
+    /**
+     * Scenario: user does not exist
+     * input: stubbing validateUsername method, mocking IUserRepository#findUserByUsername(username), returning null and verifying it is called
+     * expectation: asserting IUserService#findUserByUsername(username) throws UserNotFoundException
+     */
+    @Test
+    public void testFindUserByUsername_2()
+    {
+        String username="user";
+        doNothing().when(userService).validateUsername(username);
+        when(userRepository.findUserByUsername(username)).thenReturn(null);
+        Executable executable = ()-> userService.findUserByUsername(username);
+        Assertions.assertThrows(UserNotFoundException.class,executable);
+        verify(userRepository).findUserByUsername(username);
+    }
+
     /*
      * Scenario: empty username as input
+     *
      */
     @Test
     public void testValidateUserName_1() {
@@ -213,88 +296,6 @@ public class UserServiceImplUnitTest
     public void testValidatePassword_3() {
         String password = "password";
         userService.validatePassword(password);
-    }
-
-
-   
-
-	/**
-	 * Scenario: userid is negative
-	 */
-	@Test
-	public void testFindById_1()
-	{
-		long userid=-1;
-		doThrow(InvalidIdException.class).when(userService).validateId(userid);
-		Executable executable=()->userService.findById(userid);
-		Assertions.assertThrows(InvalidIdException.class, executable);
-	}
-
-
-	/**
-	 * Scenario: userid does not exist in the database
-	 */
-
-	@Test
-	public void testFindById_2()
-	{
-		long userid=100;
-		doNothing().when(userService).validateId(userid);
-		User user=mock(User.class);
-		Optional<User>optional=Optional.empty();
-
-		when(userRepository.findById(userid)).thenReturn(optional);
-		Executable executable=()->userService.findById(userid);
-		Assertions.assertThrows(UserNotFoundException.class,executable);
-	}
-	/**
-	 * Scenario: userid exist in the database
-	 */
-	@Test
-	public void testFindById_3()
-	{
-		long userid=3;
-		doNothing().when(userService).validateId(userid);
-		User user=mock(User.class);
-		Optional<User>optional = Optional.of(user);
-		when (userRepository.findById(userid)).thenReturn(optional);
-		User result=userService.findById(userid);
-		Assertions.assertEquals(user,result);
-		verify (userRepository).findById(userid);
-	}
-
-    /**
-     * Scenario: user exists
-     * input: stubbing validateUsername method, mocking IUserRepository#findUserByUsername(username), returning saved user and verifying it is called
-     * expectation: asserting IUserService#findUserByUsername(username) is not null, saved user and result user are equal
-     */
-    @Test
-    public void testFindUserByUsername_1()
-    {
-        String username="user";
-        User saved = mock(User.class);
-        doNothing().when(userService).validateUsername(username);
-        when(userRepository.findUserByUsername(username)).thenReturn(saved);
-        User result = userService.findUserByUsername(username);
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(saved,result);
-        verify(userRepository).findUserByUsername(username);
-    }
-
-    /**
-     * Scenario: user does not exist
-     * input: stubbing validateUsername method, mocking IUserRepository#findUserByUsername(username), returning null and verifying it is called
-     * expectation: asserting IUserService#findUserByUsername(username) throws UserNotFoundException
-     */
-    @Test
-    public void testFindUserByUsername_2()
-    {
-        String username="user";
-        doNothing().when(userService).validateUsername(username);
-        when(userRepository.findUserByUsername(username)).thenReturn(null);
-        Executable executable = ()-> userService.findUserByUsername(username);
-        Assertions.assertThrows(UserNotFoundException.class,executable);
-        verify(userRepository).findUserByUsername(username);
     }
 
 }

@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class CentralizedUserExceptionHandler
 {
 
-    private static final Logger LOG= LoggerFactory.getLogger(CentralizedUserExceptionHandler.class);
+//    public static final Logger log = LoggerFactory.getLogger(CentralizedUserExceptionHandler.class);
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public String handleUserNotFoundException(UserNotFoundException e)
     {
-        LOG.info("caught in handleUserNotFoundException",e);
         return e.getMessage();
     }
 
