@@ -29,10 +29,6 @@ public class ShoppingApplication
         customerService.addCustomer("customer","custpass");
         productService.add("Nike",2300.0);
 
-        log.debug("****i am logged using debug level");
-        log.info("****i am logged using info level");
-        log.error("****i am logged using error level");
-
         log.info("-------started------");
 
     }
